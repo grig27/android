@@ -34,6 +34,13 @@ import com.owncloud.android.ui.activity.PassCodeActivity;
 import com.owncloud.android.ui.activity.SettingsActivity;
 import com.owncloud.android.utils.FileSortOrder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static com.owncloud.android.ui.activity.SettingsActivity.PreferenceKeys.EXCLUDED_AUTOUPLOAD_PATTEN_DEFAULT_VALUES;
 import static com.owncloud.android.ui.fragment.OCFileListFragment.FOLDER_LAYOUT_LIST;
 
 /**
@@ -70,9 +77,18 @@ public final class AppPreferencesImpl implements AppPreferences {
     private static final String PREF__SHOW_MEDIA_SCAN_NOTIFICATIONS = "show_media_scan_notifications";
     private static final String PREF__LOCK = SettingsActivity.PREFERENCE_LOCK;
     private static final String PREF__SELECTED_ACCOUNT_NAME = "select_oc_account";
+    public static final String EXCLUDED_AUTOUPLOAD_PATTEN_KEY = "EXCLUDED_AUTOUPLOAD_PATTEN_KEY";
+    public static final Set<String> EXCLUDED_AUTOUPLOAD_PATTEN_DEFAULT_VALUES = new HashSet<>();
 
     private final Context context;
     private final SharedPreferences preferences;
+
+    static {
+        String[] SET_VALUES = new String[] {
+            ".thumbdata*"
+        };
+        EXCLUDED_AUTOUPLOAD_PATTEN_DEFAULT_VALUES.addAll(Arrays.asList(SET_VALUES));
+    }
 
     public static AppPreferences fromContext(Context context) {
         SharedPreferences prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
@@ -434,6 +450,16 @@ public final class AppPreferencesImpl implements AppPreferences {
     @Override
     public void setCurrentAccountName(String accountName) {
         preferences.edit().putString(PREF__SELECTED_ACCOUNT_NAME, accountName).apply();
+    }
+
+    @Override
+    public void setAutoUploadPatternBlackList(List<String> patternBlackList) {
+        preferences.edit().putStringSet(EXCLUDED_AUTOUPLOAD_PATTEN_KEY, new HashSet<>(patternBlackList)).apply();
+    }
+
+    @Override
+    public List<String> getAutoUploadPatternBlackList() {
+        return new ArrayList<>(preferences.getStringSet(EXCLUDED_AUTOUPLOAD_PATTEN_KEY, EXCLUDED_AUTOUPLOAD_PATTEN_DEFAULT_VALUES));
     }
 
     /**
