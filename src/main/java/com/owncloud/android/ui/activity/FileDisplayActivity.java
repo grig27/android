@@ -219,10 +219,10 @@ public class FileDisplayActivity extends FileActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
+        super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account is valid
+
         // Set the default theme to replace the launch screen theme.
         setTheme(R.style.Theme_ownCloud_Toolbar_Drawer);
-        super.onCreate(savedInstanceState); // this calls onAccountChanged() when ownCloud Account
-        // is valid
 
         /// Load of saved instance state
         if (savedInstanceState != null) {
@@ -1242,6 +1242,11 @@ public class FileDisplayActivity extends FileActivity
     protected void onResume() {
         Log_OC.v(TAG, "onResume() start");
         super.onResume();
+
+        // Passcode
+//        preferences = AppPreferencesImpl.fromContext(this);
+//        PassCodeManager passCodeManager = new PassCodeManager(preferences);
+//        passCodeManager.onActivityStarted(this);
 
         OCFile startFile = null;
         if (getIntent() != null && getIntent().getParcelableExtra(EXTRA_FILE) != null) {
