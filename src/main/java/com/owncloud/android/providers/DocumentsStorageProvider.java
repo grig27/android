@@ -334,6 +334,9 @@ public class DocumentsStorageProvider extends DocumentsProvider {
 
         Uri uri = Uri.parse(UriUtils.URI_CONTENT_SCHEME + context.getResources().getString(
             R.string.image_cache_provider_authority) + file.getRemotePath());
+
+        context.grantUriPermission("com.android.documentsui", uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
         return context.getContentResolver().openAssetFileDescriptor(uri, "r");
     }
 
